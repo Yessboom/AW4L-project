@@ -23,7 +23,7 @@ export default function Nav() {
       <ul class="container flex items-center p-3 text-gray-200">
         <NavLink href="/">Home</NavLink>
         <NavLink href="/about">About</NavLink>
-        <NavLink href="/map">My Account</NavLink>
+        <NavLink href="/account">My Account</NavLink>
         <NavLink href="/contact">Contacts</NavLink>
       </ul>
     </nav>
