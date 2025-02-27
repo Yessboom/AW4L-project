@@ -1,4 +1,5 @@
 type PlayersDraftedProps = {
+  id: number; 
   firstname: string;
   lastname?: string;
   ranking: number;
@@ -7,6 +8,7 @@ type PlayersDraftedProps = {
   schoolLogo: string;
   playerImage: string;
   year: string;
+  drafted: boolean; 
 };
 
 function PlayersDrafted(props: PlayersDraftedProps) {

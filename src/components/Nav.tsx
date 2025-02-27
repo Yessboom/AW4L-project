@@ -25,6 +25,8 @@ export default function Nav() {
         <NavLink href="/about">About</NavLink>
         <NavLink href="/account">My Account</NavLink>
         <NavLink href="/contact">Contacts</NavLink>
+        <NavLink href="/playertest">playertest</NavLink>
+
       </ul>
     </nav>
   );

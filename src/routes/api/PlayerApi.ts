@@ -1,10 +1,11 @@
 import type {APIEvent} from '@solidjs/start/server'
-import {getPlayer} from '~/lib/PlayerApi'
-import { PlayerDB } from '~/lib/PlayerDB';
+import { PlayerDB } from '~/lib/PlayerDB'
+import {getPlayers} from '~/lib/PlayerApi'
 
 
 
 
+/*
 export async function GET({ params }: APIEvent) {
   try {
     const players = await PlayerDB.player.findMany();
@@ -19,3 +20,11 @@ export async function GET({ params }: APIEvent) {
     });
   }
 }
+*/
+
+export async function GET(event:APIEvent){
+  return await getPlayers()
+}
+
+
+
