@@ -1,7 +1,7 @@
 import { createSignal, For, Show } from "solid-js";
 import { createAsyncStore } from "@solidjs/router";
 import { getAvailablePlayers } from '~/lib/PlayerApi';
-import PlayerCard from '~/components/PlayersAvailable';
+import PlayerCard from '~/components/PlayerCard';
 import DraftButton from '~/components/buttons/DraftButton';
 
 export default function PlayersBigBoard() {

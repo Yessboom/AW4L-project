@@ -1,6 +1,6 @@
 import { A } from "@solidjs/router";
 import Counter from "~/components/Counter";
-import Position from "~/components/position_button";
+import Position from "~/components/buttons/position_button";
 
 export default function About() {
   return (

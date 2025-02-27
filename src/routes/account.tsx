@@ -1,8 +1,8 @@
 import { A } from "@solidjs/router";
 import Counter from "~/components/Counter";
-import PlayersList from "~/components/PlayersAvailable";
+import PlayersList from "~/components/PlayerCard";
 import PlyrAv from "~/components/PlayerMove";
-import PlayersAvailable from "~/components/PlayersAvailable";
+import PlayersAvailable from "~/components/PlayerCard";
 
 export default function About() {
   return (

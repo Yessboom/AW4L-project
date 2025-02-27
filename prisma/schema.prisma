@@ -23,6 +23,23 @@ model Player {
   schoolLogo String
   playerImage String
   year      String
-  drafted  Boolean  @default(false)
+ draftPick   DraftPick?  //Relatio, Player-Pick
+}
+
+model DraftPick {
+  id        Int       @id @default(autoincrement())
+  round     Int
+  pick      Int
+  teamId    Int
+  team      Team      @relation(fields: [teamId], references: [id])
+  playerId  Int?      @unique
+  player    Player?   @relation(fields: [playerId], references: [id])
+}
+
+model Team {
+  id         Int        @id @default(autoincrement())
+  name       String
+  logo       String?
+  draftPicks DraftPick[]
 }
 
