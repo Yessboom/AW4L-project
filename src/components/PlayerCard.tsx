@@ -11,8 +11,8 @@ interface Player {
   lastname: string;
   position: string;
   year: string;
-  drafted: boolean;
   id: number;
+  
 }
 
 interface PlayerCardProps {

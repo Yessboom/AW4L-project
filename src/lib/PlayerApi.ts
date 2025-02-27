@@ -22,14 +22,4 @@ export const getPlayers = query(async()=>{
   
 }, "getPlayers")
 
-export const getDraftedPlayers = query(async()=>{
-  "use server";
-  return await PlayerDB.player.findMany({where:{drafted:true}})
-}, "getDraftedPlayers")
-
-export const getAvailablePlayers = query(async()=>{
-  "use server";
-  return await PlayerDB.player.findMany({where:{drafted:false}})
-}, "getAvailablePlayers")
-
 
