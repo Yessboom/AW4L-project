@@ -2,6 +2,7 @@ import { createSignal, For, Show } from "solid-js";
 import { createAsyncStore } from "@solidjs/router";
 import { getAvailablePlayers } from '~/lib/PlayerApi';
 import PlayerCard from '~/components/PlayersAvailable';
+import DraftButton from '~/components/buttons/DraftButton';
 
 export default function PlayersBigBoard() {
   const players = createAsyncStore(() => getAvailablePlayers(), {
@@ -14,6 +15,12 @@ export default function PlayersBigBoard() {
     setDraftedPlayers([...draftedPlayers(), playerId]);
   };
 
+ 
+
+  const logPlayer = (playerId: number) => {
+    console.log(`Player ${playerId} button clicked`);
+  };
+
   const filtered = () =>
     players().filter((player) => !draftedPlayers().includes(player.id));
 
@@ -22,9 +29,12 @@ export default function PlayersBigBoard() {
     <div class="flex flex-row items-center">
       <h1>Players
       <div class="player-list">
-        <For each={filtered()}>
+      <For each={filtered()}>
           {(player) => (
-            <PlayerCard player={player} onDraft={handleDraft} />
+            <div class="flex">
+              <PlayerCard player={player} />
+              <DraftButton playerId={player.id} onDraft={handleDraft} />
+            </div>
           )}
         </For>
       </div>
@@ -33,10 +43,12 @@ export default function PlayersBigBoard() {
       <div class="drafted-list">
         <For each={draftedPlayers()}>
           {(playerId) => (
+            <div class="flex">
               <PlayerCard
                 player={players().find((player) => player.id === playerId)!}
-                onDraft={handleDraft}
               />
+              <button onClick={() => logPlayer(playerId)}>Log Player</button>
+            </div>
           )}
 
         </For>

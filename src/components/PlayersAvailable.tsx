@@ -1,6 +1,5 @@
 // src/components/PlayerCard.jsx
 import { createSignal } from "solid-js";
-import { draftPlayer } from '~/lib/PlayerApi';
 
 
 interface Player {
@@ -18,7 +17,6 @@ interface Player {
 
 interface PlayerCardProps {
   player: Player;
-  onDraft: (playerId: number) => void;
 }
 
 export default function PlayerCard(props: PlayerCardProps) {
@@ -28,16 +26,12 @@ export default function PlayerCard(props: PlayerCardProps) {
     return isDrafted() ? "drafted" : "";
   };
 
-  const handleDraft = (): void => {
-    setIsDrafted(true);
-    props.onDraft(props.player.id);
-    console.log(`Drafted player: ${props.player.firstname} ${props.player.lastname}`);
-  };
+
   return (
     <div
       class={`rt-tr rt-tr-highlight ${active(props.player.firstname)} flex items-center cursor-pointer`}
       role="row"
-      style="flex: 1 0 auto; min-width: 915px;"
+      style="flex: 1 0 auto; min-width: 15px;"
     >
       <div class="rt-td rt-align-center flex items-center justify-center" role="cell" style="flex: 0 0 auto; min-width: 38px; width: 38px;">
         <div class="rt-td-inner">{props.player.ranking}</div>
@@ -70,15 +64,7 @@ export default function PlayerCard(props: PlayerCardProps) {
           </div>
         </div>
       </div>
-      <div class="rt-td rt-align-center flex items-center justify-center" role="cell" style="flex: 0 0 auto; min-width: 100px; width: 100px;">
-        <button
-          onClick={handleDraft}
-          disabled={isDrafted()}
-          class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-        >
-          {isDrafted() ? "Drafted" : "Draft"}
-        </button>
-      </div>
+
     </div>
   );
 }

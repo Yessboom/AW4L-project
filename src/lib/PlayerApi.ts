@@ -33,10 +33,3 @@ export const getAvailablePlayers = query(async()=>{
 }, "getAvailablePlayers")
 
 
-export const draftPlayer = action(async (playerId: number) => {
-  "use server";
-  await PlayerDB.player.update({
-    where: { id: playerId },
-    data: { drafted: true },
-  });
-});
