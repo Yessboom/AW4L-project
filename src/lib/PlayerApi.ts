@@ -23,3 +23,14 @@ export const getPlayers = query(async()=>{
 }, "getPlayers")
 
 
+export const getDraftPicks = query(async()=>{
+  "use server";
+  return await PlayerDB.draftPick.findMany()
+  
+}, "getDraftPicks")
+
+export const getTeams = query(async()=>{
+  "use server";
+  return await PlayerDB.team.findMany() 
+
+} , "getTeams")

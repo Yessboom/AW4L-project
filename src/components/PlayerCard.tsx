@@ -20,18 +20,14 @@ interface PlayerCardProps {
 }
 
 export default function PlayerCard(props: PlayerCardProps) {
-  const [isDrafted, setIsDrafted] = createSignal(false);
 
-  const active = (name: string): string => {
-    return isDrafted() ? "drafted" : "";
-  };
 
 
   return (
     <div
-      class={`rt-tr rt-tr-highlight ${active(props.player.firstname)} flex items-center cursor-pointer`}
+      class={`rt-tr rt-tr-highlight ${(props.player.firstname)} flex items-center cursor-pointer`}
       role="row"
-      style="flex: 1 0 auto; min-width: 15px;"
+      style="flex: 1 0 auto; min-width: 15px; border: 2px solid #ccc; padding: 10px; border-radius: 8px;"
     >
       <div class="rt-td rt-align-center flex items-center justify-center" role="cell" style="flex: 0 0 auto; min-width: 38px; width: 38px;">
         <div class="rt-td-inner">{props.player.ranking}</div>
