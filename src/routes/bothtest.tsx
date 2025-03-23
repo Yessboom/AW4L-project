@@ -1,11 +1,13 @@
-import { createSignal, For, Show, createEffect } from "solid-js";
+import { createSignal, For, Show, createEffect, createMemo } from "solid-js";
 import { createAsyncStore } from "@solidjs/router";
 import { getPlayers, getDraftPicks, getTeams } from '~/lib/PlayerApi';
 import PlayerCard from '~/components/PlayerCard';
 import DraftButton from '~/components/buttons/DraftButton';
-import PickCard from '~/components/temp_draftpick';
+import PickCard from '~/components/TeamCard';
+import { Player } from '../types';
 
 export default function DraftPage() {
+  // Load data from APIs
   const players = createAsyncStore(() => getPlayers(), {
     initialValue: [],
   });
@@ -18,7 +20,7 @@ export default function DraftPage() {
     initialValue: [],
   });
 
-  // Track who has and hans't been drafted
+  // State for tracking which players have been drafted
   const [draftedPlayers, setDraftedPlayers] = createSignal<{playerId: number, pickId: number}[]>([]);
   
   // Get the next available pick
@@ -26,25 +28,36 @@ export default function DraftPage() {
     const drafted = draftedPlayers();
     const draftedPickIds = drafted.map(dp => dp.pickId);
     
+    // Assuming picks have an id field, if not use a composite key from round/pick
     return DraftPicks().find(pick => !draftedPickIds.includes(pick.id));
   };
 
-
+  // Handle drafting a player
   const handleDraft = (playerId: number) => {
     const nextPick = getNextAvailablePick();
-    
+
     if (nextPick) {
-        console.log(`Drafting player ${playerId} for pick ${nextPick.id}`);
-      setDraftedPlayers([...draftedPlayers(), {
-        playerId,
-        pickId: nextPick.id
-      }]);
+        // Find the drafted player from the players list
+        const draftedPlayer = players().find(player => player.id === playerId);
+        
+        // Log player information
+        console.log("Drafted Player Info:", draftedPlayer);
+
+        // Log all draft picks
+        console.log("All Draft Picks:", DraftPicks());
+
+        // Update state
+        setDraftedPlayers((prev) => [...prev, { playerId, pickId: nextPick.id }]);
+
+        console.log(`Drafted player ${playerId} to pick ${nextPick.id}`);
     } else {
-      console.log("All picks have been used!");
+        console.log("All picks have been used!");
     }
-  };
+};
 
 
+
+  // Get team by ID
   const getTeamById = (teamId: number) => {
     return Teams().find(team => team.id === teamId);
   };
@@ -60,10 +73,10 @@ export default function DraftPage() {
   // Get the player for a specific pick
   const getPlayerForPick = (pickId: number) => {
     const draftedPick = draftedPlayers().find(dp => dp.pickId === pickId);
-    if (!draftedPick) return null;
-    
-    return players().find(player => player.id === draftedPick.playerId);
+    return draftedPick ? players().find(player => player.id === draftedPick.playerId) : undefined;
   };
+  
+  
 
   return (
     <div class="flex flex-row w-full h-full">
@@ -86,13 +99,14 @@ export default function DraftPage() {
       <div class="w-1/2 p-4 overflow-y-auto" style="max-height: 90vh;">
         <h1 class="text-xl font-bold mb-4">Draft Board</h1>
         <div class="space-y-4">
+
           <For each={DraftPicks()}>
             {(pick) => {
               const team = getTeamById(pick.teamId);
-              const draftedPlayer = getPlayerForPick(pick.id);
+              const draftedPlayer = () => getPlayerForPick(pick.id);
               
               return (
-                <div class="flex">
+                <div class="w-full">
                   <PickCard
                     pick={{
                       pickNumber: pick.pick,
@@ -104,14 +118,8 @@ export default function DraftPage() {
                       name: team?.name ?? "Unknown",
                       logo: team?.logo ?? ""
                     }}
-                    draftedPlayer={draftedPlayer ?? undefined}
+                    draftedPlayer={draftedPlayer()}
                   />
-                  
-                  {draftedPlayer && (
-                    <div class="ml-2">
-                      <PlayerCard player={draftedPlayer} />
-                    </div>
-                  )}
                 </div>
               );
             }}
