@@ -1,0 +1,130 @@
+[
+    {
+      "name": "Arizona Cardinals",
+      "logo": "cardinals.png"
+    },
+    {
+      "name": "Atlanta Falcons",
+      "logo": "falcons.png"
+    },
+    {
+      "name": "Baltimore Ravens",
+      "logo": "ravens.png"
+    },
+    {
+      "name": "Buffalo Bills",
+      "logo": "bills.png"
+    },
+    {
+      "name": "Carolina Panthers",
+      "logo": "panthers.png"
+    },
+    {
+      "name": "Chicago Bears",
+      "logo": "bears.png"
+    },
+    {
+      "name": "Cincinnati Bengals",
+      "logo": "bengals.png"
+    },
+    {
+      "name": "Cleveland Browns",
+      "logo": "browns.png"
+    },
+    {
+      "name": "Dallas Cowboys",
+      "logo": "cowboys.png"
+    },
+    {
+      "name": "Denver Broncos",
+      "logo": "broncos.png"
+    },
+    {
+      "name": "Detroit Lions",
+      "logo": "lions.png"
+    },
+    {
+      "name": "Green Bay Packers",
+      "logo": "packers.png"
+    },
+    {
+      "name": "Houston Texans",
+      "logo": "texans.png"
+    },
+    {
+      "name": "Indianapolis Colts",
+      "logo": "colts.png"
+    },
+    {
+      "name": "Jacksonville Jaguars",
+      "logo": "jaguars.png"
+    },
+    {
+      "name": "Kansas City Chiefs",
+      "logo": "chiefs.png"
+    },
+    {
+      "name": "Las Vegas Raiders",
+      "logo": "raiders.png"
+    },
+    {
+      "name": "Los Angeles Chargers",
+      "logo": "chargers.png"
+    },
+    {
+      "name": "Los Angeles Rams",
+      "logo": "rams.png"
+    },
+    {
+      "name": "Miami Dolphins",
+      "logo": "dolphins.png"
+    },
+    {
+      "name": "Minnesota Vikings",
+      "logo": "vikings.png"
+    },
+    {
+      "name": "New England Patriots",
+      "logo": "patriots.png"
+    },
+    {
+      "name": "New Orleans Saints",
+      "logo": "saints.png"
+    },
+    {
+      "name": "New York Giants",
+      "logo": "giants.png"
+    },
+    {
+      "name": "New York Jets",
+      "logo": "jets.png"
+    },
+    {
+      "name": "Philadelphia Eagles",
+      "logo": "eagles.png"
+    },
+    {
+      "name": "Pittsburgh Steelers",
+      "logo": "steelers.png"
+    },
+    {
+      "name": "San Francisco 49ers",
+      "logo": "49ers.png"
+    },
+    {
+      "name": "Seattle Seahawks",
+      "logo": "seahawks.png"
+    },
+    {
+      "name": "Tampa Bay Buccaneers",
+      "logo": "buccaneers.png"
+    },
+    {
+      "name": "Tennessee Titans",
+      "logo": "titans.png"
+    },
+    {
+      "name": "Washington Commanders",
+      "logo": "commanders.png"
+    }
+]
