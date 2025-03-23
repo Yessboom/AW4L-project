@@ -1,0 +1,7 @@
+Plutôt switch ou Show ?  Quelles diff ? (bothtest)
+=> Est-ce que j'utilise Dynamic plutôt ? Mais pas sûr de comment il marche
+Est-ce que je peux claquer toutes mes fonctions autre part ? (bothtest)
+Est-ce que je peux créer des shows pour mes components ou est-ce que ça deviens.. chaud
+Est-ce qu'il faut mettre des ErrorBoundary sur tous les components au cas où ou est-ce que c'est pas necessaire? 
+OnCleanup ça sert à quoi? 
+Memo pour retenir le next available pick ? Mais je fais quoi si on quitte la session ? 

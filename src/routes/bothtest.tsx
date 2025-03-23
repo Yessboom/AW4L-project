@@ -6,6 +6,7 @@ import DraftButton from '~/components/buttons/DraftButton';
 import PickCard from '~/components/TeamCard';
 import TradeButton from "~/components/buttons/TradeButton";
 import { Player } from '../types';
+import { Dynamic } from "solid-js/web";
 
 export default function DraftPage() {
   // Load data from APIs
@@ -24,10 +25,13 @@ export default function DraftPage() {
   // State for tracking which players have been drafted
   const [draftedPlayers, setDraftedPlayers] = createSignal<{playerId: number, pickId: number}[]>([]);
   
-  // State for tracking trade mode
+  // State for tracking trade mode (to change the UI)
   const [tradeMode, setTradeMode] = createSignal(false);
   const [sourcePickId, setSourcePickId] = createSignal<number | null>(null);
   const [targetPickId, setTargetPickId] = createSignal<number | null>(null);
+  
+
+  const [positionFilter, setPositionFilter] = createSignal<string | null>(null);
   
   // Get the next available pick (not yet drafted)
   const getNextAvailablePick = () => {
@@ -68,7 +72,7 @@ export default function DraftPage() {
     };
   };
 
-  // Handle drafting a player
+  // Handle drafting a player (Doesn't work yet. Need to implement server side logic)
   const handleDraft = (playerId: number) => {
     const nextPick = getNextAvailablePick();
 
@@ -76,13 +80,9 @@ export default function DraftPage() {
         // Find the drafted player from the players list
         const draftedPlayer = players().find(player => player.id === playerId);
         
-        // Log player information
         console.log("Drafted Player Info:", draftedPlayer);
-
-        // Log all draft picks
         console.log("All Draft Picks:", DraftPicks());
 
-        // Update state
         setDraftedPlayers((prev) => [...prev, { playerId, pickId: nextPick.id }]);
 
         console.log(`Drafted player ${playerId} to pick ${nextPick.id}`);
@@ -91,7 +91,7 @@ export default function DraftPage() {
     }
   };
 
-  // Handle initiating a trade
+
   const handleTrade = (pickId: number) => {
     setSourcePickId(pickId);
     setTradeMode(true);
@@ -99,12 +99,10 @@ export default function DraftPage() {
     console.log(`Initiated trade for ${pickDetails?.displayName}`);
   };
 
-  // Handle selecting a target pick for trade
   const selectTargetForTrade = (pickId: number) => {
     setTargetPickId(pickId);
   };
 
-  // Execute the trade between source and target picks
   const executeTrade = () => {
     const source = sourcePickId();
     const target = targetPickId();
@@ -113,16 +111,14 @@ export default function DraftPage() {
       // Create a mutable copy of the picks
       const picks = [...DraftPicks()];
       
-      // Find the picks to trade
+      // Chose the picks to trade
       const sourcePick = picks.find(pick => pick.id === source);
       const targetPick = picks.find(pick => pick.id === target);
       
       if (sourcePick && targetPick) {
-        // Get team information for logging
-        const sourceTeam = getTeamById(sourcePick.teamId);
-        const targetTeam = getTeamById(targetPick.teamId);
+
         
-        // Swap team IDs
+        // Not working yet because I need to implement server side logic and can't just allow anyone to swap this data
         const sourceTeamId = sourcePick.teamId;
         sourcePick.teamId = targetPick.teamId;
         targetPick.teamId = sourceTeamId;
@@ -139,14 +135,16 @@ export default function DraftPage() {
     }
   };
 
-  // Cancel the trade
+  const isSelectableForTrade = (pickId: number) => {
+    return tradeMode() && sourcePickId() !== pickId && !getPlayerForPick(pickId);
+  };
+
   const cancelTrade = () => {
     setTradeMode(false);
     setSourcePickId(null);
     setTargetPickId(null);
   };
 
-  // Get team by ID
   const getTeamById = (teamId: number) => {
     return Teams().find(team => team.id === teamId);
   };
@@ -156,7 +154,15 @@ export default function DraftPage() {
     const drafted = draftedPlayers();
     const draftedPlayerIds = drafted.map(dp => dp.playerId);
     
-    return players().filter(player => !draftedPlayerIds.includes(player.id));
+    let filtered = players().filter(player => !draftedPlayerIds.includes(player.id));
+    
+    // Apply position filter if one is selected
+    const currentPositionFilter = positionFilter();
+    if (currentPositionFilter) {
+      filtered = filtered.filter(player => player.position === currentPositionFilter);
+    }
+    
+    return filtered;
   };
 
   // Get the player for a specific pick
@@ -165,18 +171,77 @@ export default function DraftPage() {
     return draftedPick ? players().find(player => player.id === draftedPick.playerId) : undefined;
   };
   
-  // Check if a pick is selectable for trade target
-  const isSelectableForTrade = (pickId: number) => {
-    return tradeMode() && sourcePickId() !== pickId && !getPlayerForPick(pickId);
+
+
+  const positions = {
+    QB: "Quarterback",
+    RB: "Running Back",
+    WR: "Wide Receiver",
+    TE: "Tight End",
+    OT: "Offensive Tackle",
+    OG: "Offensive Guard",
+    C: "Center",
+    ED: "Edge Rusher",
+    IDL: "Interior Defensive Lineman",
+    LB: "Linebacker",
+    CB: "Cornerback",
+    S: "Safety",
+    K: "Kicker",
+    P: "Punter",
   };
+  
 
-
+  const handleFilterChange = (position: string | null) => {
+    // If we click the current active filter it resets it
+    if (position === positionFilter()) {
+      setPositionFilter(null);
+    } else {
+      setPositionFilter(position);
+    }
+  };
 
   return (
     <div class="flex flex-row w-full h-full">
       {/* Left side - Available Players */}
       <div class="w-1/3 p-4 overflow-y-auto" style="max-height: 90vh;">
         <h1 class="text-xl font-bold mb-4">Available Players</h1>
+        
+        {/* Position Filter Buttons */}
+        <div class="mb-4">
+          <div class="flex flex-wrap gap-2">
+            {/* All positions button */}
+            <button
+              class={`px-3 py-1 rounded text-sm ${positionFilter() === null ? 'bg-blue-500 text-white' : 'bg-gray-200 hover:bg-gray-300'}`}
+              onClick={() => handleFilterChange(null)}
+            >
+              All
+            </button>
+            
+            {/* All the other buttons */}
+            {Object.entries(positions).map(([key, label]) => (
+              <button
+                class={`px-3 py-1 rounded text-sm ${positionFilter() === key ? 'bg-blue-500 text-white' : 'bg-gray-200 hover:bg-gray-300'}`}
+                onClick={() => handleFilterChange(key)}
+              >
+                {key}
+              </button>
+            ))}
+          </div>
+          
+          {/* filter indicator */}
+          <Show when={positionFilter()}>
+            <div class="mt-2 text-sm">
+              Filtering: {positionFilter() ? positions[positionFilter() as keyof typeof positions] : ''}
+              <button 
+                class="ml-2 text-red-500 hover:text-red-700"
+                onClick={() => setPositionFilter(null)}
+              >
+                ✕
+              </button>
+            </div>
+          </Show>
+        </div>
+        
         <div class="player-list space-y-2">
           <For each={availablePlayers()}>
             {(player) => (
@@ -188,6 +253,13 @@ export default function DraftPage() {
               </div>
             )}
           </For>
+          
+          {/* Show message when no players match filter */}
+          <Show when={availablePlayers().length === 0}>
+            <div class="text-center py-4 text-gray-500">
+              No players available with the selected filter.
+            </div>
+          </Show>
         </div>
       </div>
 
