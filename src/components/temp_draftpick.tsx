@@ -42,6 +42,13 @@ export default function PickCard(props: PickCardProps) {
           <img src={`/teamLogos/${props.team.logo}`} height="35px" width="35px" alt={props.team.name} loading="lazy" />
         </div>
       </div>
+      <div class="rt-td rt-align-center flex items-center justify-center" role="cell" style="flex: 0 0 auto; min-width: 42px; width: 42px;">
+        <div class="rt-td-inner">
+          <div class="rt-text-content" style="display: inline;">
+        <div style="line-height:12px"><span style="font-weight:bold;font-size:10px">{props.draftedPlayer ? props.draftedPlayer.firstname : "Pick is incoming"}</span></div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

@@ -27,6 +27,8 @@ export default function Nav() {
         <NavLink href="/contact">Contacts</NavLink>
         <NavLink href="/playertest">playertest</NavLink>
         <NavLink href="/teamtest">teamtest</NavLink>
+        <NavLink href="/bothtest">both</NavLink>
+
 
       </ul>
     </nav>
