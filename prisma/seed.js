@@ -1,45 +1,33 @@
 import { PrismaClient } from '@prisma/client';
+import fs from 'fs';
+import path from 'path';
 
 const prisma = new PrismaClient();
 
 async function main() {
-  const players = [
-    {
-      firstname: "Travis",
-      lastname: "Hunter",
-      ranking: 1,
-      school: "Jackson State",
-      position: "CB",
-      schoolLogo: "https://a.espncdn.com/i/teamlogos/ncaa/500/38.png",
-      playerImage: "https://www.nfldraftbuzz.com/Content/PlayerHeadShots/Travis-Hunter-CB-JacksonState.png",
-      year: "JR.",
-    },
-    {
-      firstname: "Not Travis",
-      lastname: "Hunter",
-      ranking: 2,
-      school: "Jackson State",
-      position: "CB",
-      schoolLogo: "https://a.espncdn.com/i/teamlogos/ncaa/500/38.png",
-      playerImage: "https://www.nfldraftbuzz.com/Content/PlayerHeadShots/Travis-Hunter-CB-JacksonState.png",
-      year: "JR.",
-    },
-  ];
+  try {
+    // Resolve the path to the JSON file
+    const filePath = path.resolve('public/scrappedData/prospects.json');
 
-  for (const player of players) {
-    await prisma.player.create({
-      data: player,
+    // Read the JSON file
+    const players = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+
+    // Use a transaction to ensure all data is inserted correctly
+    await prisma.$transaction(async (prisma) => {
+      for (const player of players) {
+        await prisma.player.create({
+          data: player,
+        });
+      }
     });
-  }
 
-  console.log('Data seeded successfully');
+    console.log('Data seeded successfully');
+  } catch (error) {
+    console.error('Error seeding data:', error);
+    process.exit(1);
+  } finally {
+    await prisma.$disconnect();
+  }
 }
 
-main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+main();
