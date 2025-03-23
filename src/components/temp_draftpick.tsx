@@ -1,3 +1,4 @@
+//Not used in the final version of the app
 import { Show } from "solid-js";
 import { Player } from '../types';
 
