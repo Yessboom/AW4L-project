@@ -18,7 +18,7 @@ async function main() {
 
     const doUpdatePlayer = false;
     const doUpdateTeam = false;
-    const doUpdateDraftPick = true;
+    const doUpdateDraftPick = false;
 
     // Use a transaction to ensure all data is deleted and inserted correctly
     await prisma.$transaction(async (prisma) => {
