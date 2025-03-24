@@ -1,35 +1,23 @@
-import { createSignal, createResource, Switch, Match, Show } from "solid-js";
+import { createAsync, type RouteDefinition } from "@solidjs/router";
+import { getUser, logout } from "~/lib/Index";
 
-const fetchUser = async (id: number) => {
-  const response = await fetch(`https://swapi.dev/api/people/${id}/`);
-  return response.json();
-}
+export const route = {
+  preload() {
+    getUser();
+  }
+} satisfies RouteDefinition;
 
-function App() {
-  const [userId, setUserId] = createSignal<number>();
-  const [user] = createResource(userId, fetchUser);
-
+export default function Home() {
+  const user = createAsync(() => getUser(), { deferStream: true });
   return (
-    <div>
-      <input
-        type="number"
-        min="1"
-        placeholder="Enter Numeric Id"
-        onInput={(e) => setUserId(Number(e.currentTarget.value))}
-      />
-      <Show when={user.loading}>
-        <p>Loading...</p>
-      </Show>
-      <Switch>
-        <Match when={user.error}>
-          <span>Error: {user.error}</span>
-        </Match>
-        <Match when={user()}>
-          <div>{JSON.stringify(user())}</div>
-        </Match>
-      </Switch>
-    </div>
+    <main class="w-full p-4 space-y-2">
+      <h2 class="font-bold text-3xl">Hello {user()?.username}</h2>
+      <h3 class="font-bold text-xl">Message board</h3>
+      <form action={logout} method="post">
+        <button name="logout" type="submit">
+          Logout
+        </button>
+      </form>
+    </main>
   );
 }
-
-export default App;

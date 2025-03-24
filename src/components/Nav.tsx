@@ -23,7 +23,7 @@ export default function Nav() {
       <ul class="container flex items-center p-3 text-gray-200">
         <NavLink href="/">Home</NavLink>
         <NavLink href="/about">About</NavLink>
-        <NavLink href="/account">My Account</NavLink>
+        <NavLink href="/login">Login </NavLink>
         <NavLink href="/contact">Contacts</NavLink>
         <NavLink href="/playertest">playertest</NavLink>
         <NavLink href="/teamtest">teamtest</NavLink>
