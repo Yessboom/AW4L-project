@@ -1,5 +1,7 @@
 import { useLocation } from "@solidjs/router";
-import { JSXElement } from "solid-js";
+import { JSXElement, createSignal } from "solid-js";
+import { getUser, logout } from "~/lib/Index";
+
 
 type NavLinkProps = {
   href: string;
@@ -18,12 +20,14 @@ function NavLink(props: NavLinkProps) {
 }
 
 export default function Nav() {
+  const [isLoggedIn, setIsLoggedIn] = createSignal(getUser() !== undefined);
   return (
     <nav class="bg-sky-800">
       <ul class="container flex items-center p-3 text-gray-200">
         <NavLink href="/">Home</NavLink>
         <NavLink href="/about">About</NavLink>
-        <NavLink href="/login">Login </NavLink>
+        
+        {!isLoggedIn() && <NavLink href="/login">Login</NavLink>}
         <NavLink href="/contact">Contacts</NavLink>
         <NavLink href="/playertest">playertest</NavLink>
         <NavLink href="/teamtest">teamtest</NavLink>
