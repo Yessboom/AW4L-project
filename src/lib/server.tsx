@@ -1,5 +1,12 @@
 import { useSession } from "vinxi/http";
 import { PlayerDB } from "./PlayerDB";
+import bcrypt from "bcryptjs";
+
+type SessionData = {
+    userId?: string;
+  }
+  
+
 
 export function validateUsername(username: unknown) {
   if (typeof username !== "string" || username.length < 3) {
@@ -15,27 +22,34 @@ export function validatePassword(password: unknown) {
 
 export async function login(username: string, password: string) {
   const user = await PlayerDB.user.findUnique({ where: { username } });
-  if (!user || password !== user.password) throw new Error("Invalid login");
+  if (!user) throw new Error("Invalid login");
+  const valid = await bcrypt.compare(password, user.password);
+  if (!valid) throw new Error("Invalid login");
   return user;
 }
 
 export async function logout() {
   const session = await getSession();
   await session.update(d => {
-    d.userId = undefined;
+    return { userId: undefined };
   });
 }
 
 export async function register(username: string, password: string) {
   const existingUser = await PlayerDB.user.findUnique({ where: { username } });
   if (existingUser) throw new Error("User already exists");
+  console.log(password)
+  password = await bcrypt.hash(password, 10)
+  console.log(password)
+
   return PlayerDB.user.create({
     data: { username: username, password }
   });
 }
 
 export function getSession() {
-  return useSession({
-    password: process.env.SESSION_SECRET ?? "areallylongsecretthatyoushouldreplace"
-  });
-}
+    'use server'
+    return useSession<SessionData>({
+      password: import.meta.env.VITE_SESSION_SECRET,
+    })
+  }

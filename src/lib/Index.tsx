@@ -37,9 +37,9 @@ export const loginOrRegister = action(async (formData: FormData) => {
       ? register(username, password)
       : login(username, password));
     const session = await getSession();
-    await session.update(d => {
-      d.userId = user.id;
-    });
+    await session.update(d => ({
+      userId: user.id
+    }));
   } catch (err) {
     return err as Error;
   }

@@ -127,7 +127,6 @@ export default function DraftPage() {
           R${sourcePick.round} P${sourcePick.pick} (now ${getTeamById(sourcePick.teamId)?.name}) ↔ 
           R${targetPick.round} P${targetPick.pick} (now ${getTeamById(targetPick.teamId)?.name})`);
         
-        // Reset trade mode
         setTradeMode(false);
         setSourcePickId(null);
         setTargetPickId(null);
@@ -228,7 +227,7 @@ export default function DraftPage() {
             ))}
           </div>
           
-          {/* filter indicator */}
+          {/* filter color */}
           <Show when={positionFilter()}>
             <div class="mt-2 text-sm">
               Filtering: {positionFilter() ? positions[positionFilter() as keyof typeof positions] : ''}
@@ -254,7 +253,6 @@ export default function DraftPage() {
             )}
           </For>
           
-          {/* Show message when no players match filter */}
           <Show when={availablePlayers().length === 0}>
             <div class="text-center py-4 text-gray-500">
               No players available with the selected filter.
@@ -366,9 +364,11 @@ export default function DraftPage() {
               
               return (
                 <div class={`w-full ${sourcePickId() === pick.id ? 'ring-2 ring-blue-500' : ''} 
-                             ${targetPickId() === pick.id ? 'ring-2 ring-green-500' : ''}`}>
+                             ${targetPickId() === pick.id ? 'ring-2 ring-green-500' : ''}
+                             ${getNextAvailablePick()?.id === pick.id ? 'bg-gray-200' : ''}`}>
                   <div class="relative">
                     <PickCard
+
                       pick={{
                         pickNumber: pick.pick,
                         pickRound: pick.round,
